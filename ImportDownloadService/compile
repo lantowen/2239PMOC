@@ -1,0 +1,2 @@
+#!/bin/bash
+ant jar.server && cp build/lib/ImportDownloadServices.aar /Users/lan/Documents/9322/apache-tomcat-7.0.42/webapps/axis2/WEB-INF/services/
