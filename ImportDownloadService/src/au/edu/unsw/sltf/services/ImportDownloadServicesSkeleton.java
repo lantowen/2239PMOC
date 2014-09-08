@@ -7,8 +7,14 @@
  */
 package au.edu.unsw.sltf.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Calendar;
 
+import au.edu.unsw.sltf.services.ImportDownloadFaultDocument.ImportDownloadFault;
 import au.edu.unsw.sltf.services.ImportMarketDataDocument.ImportMarketData;
 import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDataResponse;
 
@@ -31,15 +37,46 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 	public ImportMarketDataResponseDocument importMarketData(ImportMarketDataDocument reqDoc) 
 			throws ImportDownloadFaultException{
 		ImportMarketData req = reqDoc.getImportMarketData();
-		String retSec = "abc"+req.getSec();
-		String retUrl = "abc"+req.getDataSourceURL();
-		Calendar retStartDate = req.getStartDate();
-		Calendar retEndDate = req.getEndDate();
-		
-		System.out.println(retSec);
-		System.out.println(retUrl);
-		System.out.println(retStartDate);
-		System.out.println(retEndDate);
+		String secStr = req.getSec();
+		String urlStr = req.getDataSourceURL();
+		Calendar StartDate = req.getStartDate();
+		Calendar EndDate = req.getEndDate();
+		URL url;
+		try	{
+			 url = new URL(urlStr);
+		} catch (MalformedURLException mue) {
+			ImportDownloadFaultException e = new ImportDownloadFaultException();
+			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
+			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
+			f.setFaultMessage("Invalid URL: " + urlStr);
+			f.setFaultType(ImportDownloadFaultType.INVALID_URL);
+			e.setFaultMessage(fDoc);
+			throw e;
+		}
+		if (!secStr.matches("[A-Z]{3,4}")) {
+
+			ImportDownloadFaultException e = new ImportDownloadFaultException();
+			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
+			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
+			f.setFaultMessage(ImportDownloadFaultType.INVALID_SEC_CODE.toString());
+			f.setFaultType(ImportDownloadFaultType.INVALID_SEC_CODE);
+			e.setFaultMessage(fDoc);
+			throw e;
+		}
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+			String inputLine;
+	        while ((inputLine = in.readLine()) != null)
+	            System.out.println(inputLine);
+	        in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();	
+		}
+		System.out.println(secStr);
+		System.out.println(urlStr);
+		System.out.println(StartDate);
+		System.out.println(EndDate);
 		
 		ImportMarketDataResponseDocument resDoc = ImportMarketDataResponseDocument.Factory.newInstance();
 		ImportMarketDataResponse res = resDoc.addNewImportMarketDataResponse();
