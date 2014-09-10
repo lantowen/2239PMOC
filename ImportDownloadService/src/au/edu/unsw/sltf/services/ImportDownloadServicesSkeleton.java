@@ -9,6 +9,8 @@ package au.edu.unsw.sltf.services;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -47,8 +49,9 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		String urlStr = req.getDataSourceURL();
 		Calendar startDate = req.getStartDate();
 		Calendar endDate = req.getEndDate();
+		String path = System.getenv("CATALINA_HOME");
 		URL url = null;
-		String fileName;
+		String fileName = null;
 		boolean urlFlag = false;
 		if (!secStr.matches("[A-Z]{3,4}")) {
 
@@ -96,7 +99,6 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 				try {
 					BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
 					String inputLine;
-					String path = System.getenv("CATALINA_HOME");
 					boolean dir = new File(path+"/temp/").mkdir();
 					if(dir == false) {
 						System.out.println("failed to create a temp directory"+path+"/temp/");
@@ -121,6 +123,64 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			f.setFaultType(ImportDownloadFaultType.INVALID_URL);
 			e.setFaultMessage(fDoc);
 			throw e;
+		}
+		try {
+			System.out.println("~~~hello");
+			BufferedReader reader = new BufferedReader(new FileReader(path+"/temp/"+fileName));
+			String newFileName = System.currentTimeMillis()+".csv";
+			System.out.println(path+"/webapps/ROOT/"+newFileName);
+			PrintWriter writer = new PrintWriter(path+"/webapps/ROOT/"+newFileName, "UTF-8");
+			String inLine;
+			while((inLine = reader.readLine()) != null) {
+				 String[] result = inLine.split(",");
+				 if(!secStr.equals(result[0]))
+					 continue;
+				 else {
+					 String[] dateData = result[1].split("-");
+					 String[] timeData = result[2].split(":");
+					 String second = timeData[2].substring(0,timeData[2].lastIndexOf("."));
+					 int month = 0;
+					 if(dateData[1].equals("JAN"))
+						 month = 1;
+					 else if(dateData[1].equals("FEB"))
+						 month = 2;
+					 else if(dateData[1].equals("MAR"))
+						 month = 3;
+					 else if(dateData[1].equals("APR"))
+						 month = 4;
+					 else if(dateData[1].equals("MAY"))
+						 month = 5;
+					 else if(dateData[1].equals("JUN"))
+						 month = 6;
+					 else if(dateData[1].equals("JUL"))
+						 month = 7;
+					 else if(dateData[1].equals("AUG"))
+						 month = 8;
+					 else if(dateData[1].equals("SEP"))
+						 month = 9;
+					 else if(dateData[1].equals("OCT"))
+						 month = 10;
+					 else if(dateData[1].equals("NOV"))
+						 month = 11;
+					 else if(dateData[1].equals("DEC"))
+						 month = 12;
+					 else
+						 System.out.println("invalid month");
+
+					 Calendar calendarData = Calendar.getInstance();
+					 calendarData.set(Integer.parseInt(dateData[2]), month, Integer.parseInt(dateData[0]), 
+								Integer.parseInt(timeData[0]),Integer.parseInt(timeData[1]),Integer.parseInt(second));
+					 if(calendarData.after(startDate)&&calendarData.before(endDate)) 
+						 writer.println(inLine);
+					 else
+						 continue;
+				 }
+				
+			}
+			 reader.close();
+			 writer.close();
+		} catch (Exception e) {
+			System.out.println("~~~"+e.toString());
 		}
 
 		
