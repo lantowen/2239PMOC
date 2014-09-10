@@ -126,8 +126,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		
 		System.out.println(secStr);
 		System.out.println(urlStr);
-		System.out.println(StartDate);
-		System.out.println(EndDate);
+		System.out.println(startDate);
+		System.out.println(endDate);
 		
 		ImportMarketDataResponseDocument resDoc = ImportMarketDataResponseDocument.Factory.newInstance();
 		ImportMarketDataResponse res = resDoc.addNewImportMarketDataResponse();
