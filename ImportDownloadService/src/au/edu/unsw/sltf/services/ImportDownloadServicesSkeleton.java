@@ -14,14 +14,18 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 
 import org.apache.axis2.description.AxisService;
 
 import com.sun.corba.se.spi.activation.Server;
 
+import au.edu.unsw.sltf.services.DownloadFileDocument.DownloadFile;
+import au.edu.unsw.sltf.services.DownloadFileResponseDocument.DownloadFileResponse;
 import au.edu.unsw.sltf.services.ImportDownloadFaultDocument.ImportDownloadFault;
 import au.edu.unsw.sltf.services.ImportMarketDataDocument.ImportMarketData;
 import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDataResponse;
@@ -31,8 +35,8 @@ import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDa
  */
 public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSkeletonInterface{
 
-	
-	
+	private static String path = System.getenv("CATALINA_HOME");
+	private static int counter  = 0;
 
 	/**
 	 * Auto generated method signature
@@ -49,7 +53,6 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		String urlStr = req.getDataSourceURL();
 		Calendar startDate = req.getStartDate();
 		Calendar endDate = req.getEndDate();
-		String path = System.getenv("CATALINA_HOME");
 		URL url = null;
 		String fileName = null;
 		boolean urlFlag = false;
@@ -125,9 +128,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			throw e;
 		}
 		try {
-			System.out.println("~~~hello");
 			BufferedReader reader = new BufferedReader(new FileReader(path+"/temp/"+fileName));
-			String newFileName = System.currentTimeMillis()+".csv";
+			String newFileName = counter+".csv";
 			System.out.println(path+"/webapps/ROOT/"+newFileName);
 			PrintWriter writer = new PrintWriter(path+"/webapps/ROOT/"+newFileName, "UTF-8");
 			String inLine;
@@ -179,8 +181,14 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			}
 			 reader.close();
 			 writer.close();
-		} catch (Exception e) {
-			System.out.println("~~~"+e.toString());
+		} catch (Exception e1) {
+			ImportDownloadFaultException e = new ImportDownloadFaultException();
+			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
+			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
+			f.setFaultMessage(ImportDownloadFaultType.PROGRAM_ERROR.toString());
+			f.setFaultType(ImportDownloadFaultType.PROGRAM_ERROR);
+			e.setFaultMessage(fDoc);
+			throw e;
 		}
 
 		
@@ -192,7 +200,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		ImportMarketDataResponseDocument resDoc = ImportMarketDataResponseDocument.Factory.newInstance();
 		ImportMarketDataResponse res = resDoc.addNewImportMarketDataResponse();
 		
-		res.setEventSetId("12345");
+		res.setEventSetId(Integer.toString(counter));
+		counter++;
 		
 		return resDoc;
 
@@ -209,8 +218,43 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 
 	public DownloadFileResponseDocument downloadFile(DownloadFileDocument reqDoc) 
 			throws ImportDownloadFaultException{
-		//TODO : fill this with the necessary business logic
-		throw new  java.lang.UnsupportedOperationException("Please implement " + this.getClass().getName() + "#downloadFile");
+		String retAddress = null;
+		DownloadFile dFile= reqDoc.getDownloadFile();
+		String eventSetId = dFile.getEventSetId();
+		System.out.println(eventSetId);
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(path+"/webapps/ROOT/"+eventSetId+".csv"));
+			reader.close();
+		} catch (Exception e1) {
+			ImportDownloadFaultException e = new ImportDownloadFaultException();
+			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
+			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
+			f.setFaultMessage(ImportDownloadFaultType.INVALID_EVENT_SET_ID.toString());
+			f.setFaultType(ImportDownloadFaultType.INVALID_EVENT_SET_ID);
+			e.setFaultMessage(fDoc);
+			throw e;
+		}
+
+		InetAddress inetAddress = null;
+		
+		try {
+			inetAddress = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			System.out.println("failed to get the local host");
+		}
+		if(inetAddress != null) 
+			retAddress = inetAddress.toString()+":8080/"+eventSetId+".csv";
+		
+		System.out.println(retAddress);
+		DownloadFileResponseDocument resDoc = DownloadFileResponseDocument.Factory.newInstance();
+		DownloadFileResponse res = resDoc.addNewDownloadFileResponse();
+		
+		res.setDataURL(retAddress);
+		
+		return resDoc;
+	
+
 	}
+	
 
 }
