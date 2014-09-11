@@ -36,6 +36,7 @@ import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDa
 public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSkeletonInterface{
 
 	private static String path = System.getenv("CATALINA_HOME");
+	// TODO: initialise to the value from the last run/crash of tomcat
 	private static int counter  = 0;
 
 	/**
@@ -57,23 +58,12 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		String fileName = null;
 		boolean urlFlag = false;
 		if (!secStr.matches("[A-Z]{3,4}")) {
-
-			ImportDownloadFaultException e = new ImportDownloadFaultException();
-			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
-			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
-			f.setFaultMessage(ImportDownloadFaultType.INVALID_SEC_CODE.toString());
-			f.setFaultType(ImportDownloadFaultType.INVALID_SEC_CODE);
-			e.setFaultMessage(fDoc);
-			throw e;
+			throw createFault(ImportDownloadFaultType.INVALID_SEC_CODE, 
+					ImportDownloadFaultType.INVALID_SEC_CODE.toString());
 		}
 		if(startDate.after(endDate)) {
-			ImportDownloadFaultException e = new ImportDownloadFaultException();
-			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
-			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
-			f.setFaultMessage("Invalid date");
-			f.setFaultType(ImportDownloadFaultType.PROGRAM_ERROR);
-			e.setFaultMessage(fDoc);
-			throw e;
+			throw createFault(ImportDownloadFaultType.PROGRAM_ERROR, 
+					"Start date must be before the end date");
 		}
 		do {
 			try	{
@@ -118,14 +108,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			}
 		} while(false);
 		
-		if(urlFlag == true) {
-			ImportDownloadFaultException e = new ImportDownloadFaultException();
-			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
-			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
-			f.setFaultMessage("Invalid URL: " + urlStr);
-			f.setFaultType(ImportDownloadFaultType.INVALID_URL);
-			e.setFaultMessage(fDoc);
-			throw e;
+		if (urlFlag == true) {
+			throw createFault(ImportDownloadFaultType.INVALID_URL, "Invalid URL: " + urlStr);
 		}
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path+"/temp/"+fileName));
@@ -182,13 +166,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			 reader.close();
 			 writer.close();
 		} catch (Exception e1) {
-			ImportDownloadFaultException e = new ImportDownloadFaultException();
-			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
-			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
-			f.setFaultMessage(ImportDownloadFaultType.PROGRAM_ERROR.toString());
-			f.setFaultType(ImportDownloadFaultType.PROGRAM_ERROR);
-			e.setFaultMessage(fDoc);
-			throw e;
+			throw createFault(ImportDownloadFaultType.PROGRAM_ERROR, 
+					ImportDownloadFaultType.PROGRAM_ERROR.toString());
 		}
 
 		
@@ -226,13 +205,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			BufferedReader reader = new BufferedReader(new FileReader(path+"/webapps/ROOT/"+eventSetId+".csv"));
 			reader.close();
 		} catch (Exception e1) {
-			ImportDownloadFaultException e = new ImportDownloadFaultException();
-			ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
-			ImportDownloadFault f = fDoc.addNewImportDownloadFault();
-			f.setFaultMessage(ImportDownloadFaultType.INVALID_EVENT_SET_ID.toString());
-			f.setFaultType(ImportDownloadFaultType.INVALID_EVENT_SET_ID);
-			e.setFaultMessage(fDoc);
-			throw e;
+			throw createFault(ImportDownloadFaultType.INVALID_EVENT_SET_ID, 
+					ImportDownloadFaultType.INVALID_EVENT_SET_ID.toString());
 		}
 
 		InetAddress inetAddress = null;
@@ -254,6 +228,16 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		return resDoc;
 	
 
+	}
+
+	private ImportDownloadFaultException createFault(ImportDownloadFaultType.Enum type, String message) {
+        ImportDownloadFaultException e = new ImportDownloadFaultException();
+        ImportDownloadFaultDocument fDoc = ImportDownloadFaultDocument.Factory.newInstance();
+        ImportDownloadFault f = fDoc.addNewImportDownloadFault();
+        f.setFaultType(type);
+        f.setFaultMessage(message);
+        e.setFaultMessage(fDoc);
+        return e;
 	}
 	
 
