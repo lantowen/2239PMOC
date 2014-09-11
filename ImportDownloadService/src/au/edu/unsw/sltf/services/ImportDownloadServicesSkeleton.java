@@ -243,7 +243,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			System.out.println("failed to get the local host");
 		}
 		if(inetAddress != null) 
-			retAddress = inetAddress.toString()+":8080/"+eventSetId+".csv";
+			retAddress = inetAddress.getHostAddress()+":8080/"+eventSetId+".csv";
 		
 		System.out.println(retAddress);
 		DownloadFileResponseDocument resDoc = DownloadFileResponseDocument.Factory.newInstance();
