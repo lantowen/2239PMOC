@@ -42,7 +42,7 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
 	 */
 	
 	private static CurrencyConverter converter = new CurrencyConverter();
-	private static String path = System.getenv("CATALINA_HOME");
+	private static String path = System.getenv("CATALINA_BASE");
 	private static String private_dir = path + "/temp/";
 	private static String public_dir = path + "/webapps/ROOT/";
 
@@ -114,7 +114,7 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
 	private String convertFile(String eventSetId, String currency) throws UnconvertableCurrencyException, CurrencyConvertFaultException, IOException {
         BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader(private_dir + eventSetId));
+			reader = new BufferedReader(new FileReader(private_dir + eventSetId + ".csv"));
 		} catch (FileNotFoundException e1) {
             throw createFault(CurrencyConvertFaultType.INVALID_EVENT_SET_ID, 
                     "EventSetId does not exist: " + eventSetId);
@@ -125,7 +125,7 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
         PrintWriter writer;
 
 		try {
-			writer = new PrintWriter(private_dir + resEventSetId, "UTF-8");
+			writer = new PrintWriter(private_dir + resEventSetId + ".csv", "UTF-8");
 		} catch (FileNotFoundException e1) {
 			reader.close();
             throw createFault(CurrencyConvertFaultType.PROGRAM_ERROR, 

@@ -9,10 +9,13 @@ package au.edu.unsw.sltf.services;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
@@ -20,10 +23,6 @@ import java.net.URL;
 import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.util.Calendar;
-
-import org.apache.axis2.description.AxisService;
-
-import com.sun.corba.se.spi.activation.Server;
 
 import au.edu.unsw.sltf.services.DownloadFileDocument.DownloadFile;
 import au.edu.unsw.sltf.services.DownloadFileResponseDocument.DownloadFileResponse;
@@ -37,6 +36,8 @@ import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDa
 public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSkeletonInterface{
 
 	private static String path = System.getenv("CATALINA_BASE");
+	private static String private_dir = path + "/temp/";
+	private static String public_dir = path + "/webapps/ROOT/";
 	// TODO: initialise to the value from the last run/crash of tomcat
 	private static int counter  = 0;
 
@@ -88,26 +89,41 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 				break;
 			}
 			else {
-					fileName = fileName.substring(0,fileName.lastIndexOf("."))+System.currentTimeMillis()
-							+fileName.substring(fileName.lastIndexOf("."));
 				try {
 					BufferedReader in = new BufferedReader(new InputStreamReader(
                                 url.openConnection(Proxy.NO_PROXY).getInputStream()));
 					String inputLine;
-					boolean dir = new File(path+"/temp/").mkdir();
-                    System.out.println("foo");
+					String newFileName = Integer.toString(counter)+".csv";
+					boolean dir = new File(private_dir).mkdir();
 					if(dir == false) {
-						System.out.println("failed to create a temp directory"+path+"/temp/");
+						System.out.println("failed to create a temp directory"+private_dir);
 					}
-					PrintWriter writer = new PrintWriter(path+"/temp/"+fileName, "UTF-8");
+					PrintWriter writer = new PrintWriter(private_dir+newFileName, "UTF-8");
 					inputLine = in.readLine();
-			        while ((inputLine = in.readLine()) != null)
+			        while ((inputLine = in.readLine()) != null){
+						 String[] result = inputLine.split(",");
+						 if(!secStr.equals(result[0]))
+							 continue;
+						 else {
+							 String[] dateData = result[1].split("-");
+							 String[] timeData = result[2].split(":");
+							 String second = timeData[2].substring(0,timeData[2].lastIndexOf("."));
+							 int month = 0;
+							 month = getMonthNum(dateData[1]);
+							 Calendar calendarData = Calendar.getInstance();
+							 calendarData.set(Integer.parseInt(dateData[2]), month, Integer.parseInt(dateData[0]), 
+										Integer.parseInt(timeData[0]),Integer.parseInt(timeData[1]),Integer.parseInt(second));
+							 if(calendarData.after(startDate)&&calendarData.before(endDate)) 
+								 writer.println(inputLine);
+							 else
+								 continue;
+						 }
 			           writer.println(inputLine);
+				} 
 			        in.close();
 			        writer.close();
 				} catch (IOException e) {
 					urlFlag = true;
-                    e.printStackTrace();
 				}
 			}
 		} while(false);
@@ -115,7 +131,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		if (urlFlag == true) {
 			throw createFault(ImportDownloadFaultType.INVALID_URL, "Invalid URL: " + urlStr);
 		}
-		try {
+/*		try {
 			BufferedReader reader = new BufferedReader(new FileReader(path+"/temp/"+fileName));
 			String newFileName = counter+".csv";
 			System.out.println(path+"/webapps/ROOT/"+newFileName);
@@ -172,7 +188,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		} catch (Exception e1) {
 			throw createFault(ImportDownloadFaultType.PROGRAM_ERROR, 
 					ImportDownloadFaultType.PROGRAM_ERROR.toString());
-		}
+		}*/
 
 		
 		System.out.println(secStr);
@@ -206,13 +222,29 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		String eventSetId = dFile.getEventSetId();
 		System.out.println(eventSetId);
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(path+"/webapps/ROOT/"+eventSetId+".csv"));
+			BufferedReader reader = new BufferedReader(new FileReader(private_dir+eventSetId+".csv"));
 			reader.close();
 		} catch (Exception e1) {
 			throw createFault(ImportDownloadFaultType.INVALID_EVENT_SET_ID, 
 					ImportDownloadFaultType.INVALID_EVENT_SET_ID.toString());
 		}
-
+		File source = new File(private_dir+eventSetId+".csv");
+		File dest = new File(public_dir+eventSetId+".csv");
+		InputStream input = null;
+		OutputStream output = null;
+		try{
+			input = new FileInputStream(source);
+			output = new FileOutputStream(dest);
+			byte[] buf = new byte[1024];
+			int bytesRead;
+			while((bytesRead = input.read(buf)) > 0)
+				output.write(buf, 0, bytesRead);
+			input.close();
+			output.close();
+		} catch (Exception e) {
+			throw createFault(ImportDownloadFaultType.PROGRAM_ERROR, 
+					ImportDownloadFaultType.PROGRAM_ERROR.toString());
+		}
 		InetAddress inetAddress = null;
 		
 		try {
@@ -243,6 +275,34 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
         e.setFaultMessage(fDoc);
         return e;
 	}
-	
+	private int getMonthNum(String month) {
+		 if(month.equals("JAN"))
+			 return 1;
+		 else if(month.equals("FEB"))
+			 return 2;
+		 else if(month.equals("MAR"))
+			 return 3;
+		 else if(month.equals("APR"))
+			 return 4;
+		 else if(month.equals("MAY"))
+			 return 5;
+		 else if(month.equals("JUN"))
+			 return 6;
+		 else if(month.equals("JUL"))
+			 return 7;
+		 else if(month.equals("AUG"))
+			 return 8;
+		 else if(month.equals("SEP"))
+			 return 9;
+		 else if(month.equals("OCT"))
+			 return 10;
+		 else if(month.equals("NOV"))
+			 return 11;
+		 else if(month.equals("DEC"))
+			 return 12;
+		 else
+			 return 0;
+		
+	}
 
 }

@@ -1,0 +1,2 @@
+#!/bin/bash
+ant jar.server && cp build/lib/SummaryMarketDataService.aar $CATALINA_HOME/webapps/axis2/WEB-INF/services/
