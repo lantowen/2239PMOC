@@ -17,6 +17,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 
@@ -35,7 +36,7 @@ import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDa
  */
 public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSkeletonInterface{
 
-	private static String path = System.getenv("CATALINA_HOME");
+	private static String path = System.getenv("CATALINA_BASE");
 	// TODO: initialise to the value from the last run/crash of tomcat
 	private static int counter  = 0;
 
@@ -90,9 +91,11 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 					fileName = fileName.substring(0,fileName.lastIndexOf("."))+System.currentTimeMillis()
 							+fileName.substring(fileName.lastIndexOf("."));
 				try {
-					BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+					BufferedReader in = new BufferedReader(new InputStreamReader(
+                                url.openConnection(Proxy.NO_PROXY).getInputStream()));
 					String inputLine;
 					boolean dir = new File(path+"/temp/").mkdir();
+                    System.out.println("foo");
 					if(dir == false) {
 						System.out.println("failed to create a temp directory"+path+"/temp/");
 					}
@@ -104,6 +107,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			        writer.close();
 				} catch (IOException e) {
 					urlFlag = true;
+                    e.printStackTrace();
 				}
 			}
 		} while(false);
