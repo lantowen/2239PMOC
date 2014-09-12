@@ -54,14 +54,6 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
 		String resEventSetId;
 
 		try {
-			if (!isValidEventSetId(reqEventSetId)) {
-				throw createFault(CurrencyConvertFaultType.INVALID_EVENT_SET_ID, 
-						"Invalid format for EventSetId: " + reqEventSetId);
-			}
-			if (isConverted(reqEventSetId)) {
-				throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
-						"File already contains converted prices: " + reqEventSetId);
-			}
 			resEventSetId = convertFile(reqEventSetId, reqCurrency);
 //			System.out.println("currency convert test:" + converter.convertAUD(1, reqCurrency));
 		} catch (UnconvertableCurrencyException e) {
