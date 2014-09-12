@@ -185,4 +185,8 @@ public class CurrencyConverter {
 		}
 		return res * amount;
 	}
+	
+	public boolean isValidCurrency(String currency) {
+		return unitsPerAUD.containsKey(currency);
+	}
 }
