@@ -18,8 +18,20 @@ This uses a fixed currency conversion rate as of 20th August 2014 from <a href="
 http://mcho421.srvr:8080/axis2/services/CurrencyConvertService?wsdl
 </a>
 
-<h2>Demo</h2>
-TODO: put client here
+<h2>Demo1</h2>
+<form action="TestServlet">
+<table>
+<tr>
+<td>EventSetId :</td><td> <input type = "text" name="EventSetId"></td>
+</tr>
+<tr>
+<td>TargetCurrency:</td><td> <input name="TargetCurrency" type="text"></td>
+</tr>
+<tr><td><font color =red>${message}</font></td></tr>
+<tr>
+<td><input type="submit" value ="submit"></td>		
+</table>			
+</form>
 
 <h2>Parameters</h2>
 <h3>Operation: currencyConvertMarketData</h3>
