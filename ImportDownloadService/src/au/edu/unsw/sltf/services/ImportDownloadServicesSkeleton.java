@@ -34,7 +34,7 @@ import au.edu.unsw.sltf.services.ImportMarketDataResponseDocument.ImportMarketDa
  */
 public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSkeletonInterface{
 
-	private static String path = System.getenv("CATALINA_HOME");
+	private static String path = System.getenv("CATALINA_BASE");
 	private static String private_dir = path + "/temp/";
 	private static String public_dir = path + "/webapps/ROOT/";
 	// TODO: initialise to the value from the last run/crash of tomcat

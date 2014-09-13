@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import au.edu.unsw.sltf.services.SummaryMarketDataFaultDocument.SummaryMarketDataFault;
 import au.edu.unsw.sltf.services.SummaryMarketDataDocument.SummaryMarketData;
@@ -36,12 +37,14 @@ public class SummaryMarketDataServiceSkeleton implements SummaryMarketDataServic
 
 	public SummaryMarketDataResponseDocument summaryMarketData(SummaryMarketDataDocument reqDoc)
 			throws SummaryMarketDataFaultException{
+		System.out.println(path);
 		SummaryMarketData req = reqDoc.getSummaryMarketData();
 		String eventSetId = req.getEventSetId();
 		String sec = null, marketType = null, currencyCode = null, fileSize = null;
 		int tempMarketType = 1;
 		long tempSize = 0;
-		Calendar startDate = Calendar.getInstance(), endDate = Calendar.getInstance();
+		TimeZone zone = TimeZone.getTimeZone("Etc/GMT");
+		Calendar startDate = Calendar.getInstance(zone), endDate = Calendar.getInstance(zone);
 		
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(private_dir+eventSetId+".csv"));
@@ -96,7 +99,7 @@ public class SummaryMarketDataServiceSkeleton implements SummaryMarketDataServic
 		File file = new File(private_dir+eventSetId+".csv");
 		if(file.exists())
 			tempSize = file.length();
-		fileSize = Long.toString(tempSize);
+		fileSize = humanReadableByteCount(tempSize);
 		SummaryMarketDataResponseDocument resDoc = SummaryMarketDataResponseDocument.Factory.newInstance();
 		SummaryMarketDataResponse res = resDoc.addNewSummaryMarketDataResponse();
 		System.out.println(eventSetId);
@@ -152,5 +155,12 @@ public class SummaryMarketDataServiceSkeleton implements SummaryMarketDataServic
 		 else
 			 return 0;
 		
+	}
+	private String humanReadableByteCount(long bytes) {
+	    int unit = 1000;
+	    if (bytes < unit) return bytes + " B";
+	    int exp = (int) (Math.log(bytes) / Math.log(unit));
+	    String pre = ("kMGTPE").charAt(exp-1) + ("");
+	    return String.format("%.1f %sB", bytes / Math.pow(unit, exp), pre);
 	}
 }
