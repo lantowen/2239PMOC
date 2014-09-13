@@ -1,2 +1,3 @@
 #!/bin/bash
-ant jar.server && cp build/lib/CurrencyConvertService.aar $CATALINA_HOME/webapps/axis2/WEB-INF/services/
+ant jar.server && cp build/lib/CurrencyConvertService.aar $CATALINA_BASE/webapps/axis2/WEB-INF/services/
+echo !! NOTE !! Make sure CATALINA_BASE is set!

@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.Proxy;
 import java.net.UnknownHostException;
 import java.util.Calendar;
 
@@ -89,7 +90,8 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			}
 			else {
 				try {
-					BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+					BufferedReader in = new BufferedReader(new InputStreamReader(
+                                url.openConnection(Proxy.NO_PROXY).getInputStream()));
 					String inputLine;
 					String newFileName = Integer.toString(counter)+".csv";
 					boolean dir = new File(private_dir).mkdir();
@@ -120,7 +122,9 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 				} 
 			        in.close();
 			        writer.close();
-			        }catch (IOException e) {urlFlag = true;}
+				} catch (IOException e) {
+					urlFlag = true;
+				}
 			}
 		} while(false);
 		
