@@ -18,7 +18,37 @@ http://mcho421.srvr:8080/axis2/services/ImportDownloadService?wsdl
 </a>
 
 <h2>Demo</h2>
-TODO: put client here
+<form action="ImportDownloadServlet">
+<table>
+<tr><td>ImportService</td></tr>
+<tr>
+<td>sec:</td><td> <input type = "text" name="sec"></td>
+</tr>
+<tr>
+<td>startDate:</td><td> <input name="startDate" type="text"></td>
+</tr>
+<tr>
+<td>endDate:</td><td> <input name="endDate" type="text"></td>
+</tr>
+<tr>
+<td>dataSourceURL:</td><td> <input name="dataSourceURL" type="text"></td>
+</tr>
+<tr><td><font color =red>${message1}</font></td></tr>
+<tr>
+<td><input type="submit" value ="submit"></td>		
+</table>			
+</form>
+<form action="ImportDownloadServlet">
+<table>
+<tr><td>DownloadService</td></tr>
+<tr>
+<td>eventSetId:</td><td> <input type = "text" name="eventSetId"></td>
+</tr>
+<tr><td><font color =red>${message2}</font></td></tr>
+<tr>
+<td><input type="submit" value ="submit"></td>		
+</table>			
+</form>
 
 <h2>Parameters</h2>
 <h3>Operation: importMarketData</h3>
