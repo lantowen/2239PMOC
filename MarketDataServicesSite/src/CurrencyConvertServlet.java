@@ -2,7 +2,6 @@
 
 
 import java.io.IOException;
-import java.net.Proxy;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -26,7 +25,7 @@ import org.w3c.dom.NodeList;
 /**
  * Servlet implementation class TestServlet
  */
-@WebServlet(name="CurrencyConvertServlet", urlPatterns={"/CurrencyConvertServlet"})
+@WebServlet("/CurrencyConvertServlet")
 public class CurrencyConvertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static String evenSetId;
