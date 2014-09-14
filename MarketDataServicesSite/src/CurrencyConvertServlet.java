@@ -1,6 +1,8 @@
 
 
+
 import java.io.IOException;
+import java.net.Proxy;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -22,19 +24,31 @@ import javax.xml.soap.SOAPPart;
 import org.w3c.dom.NodeList;
 
 /**
- * Servlet implementation class CurrencyConvertServlet
+ * Servlet implementation class TestServlet
  */
-@WebServlet("/CurrencyConvertServlet")
+@WebServlet(name="CurrencyConvertServlet", urlPatterns={"/CurrencyConvertServlet"})
 public class CurrencyConvertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static String evenSetId;
 	static String targetCurrency;
 	static String message;
+	static String url;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public CurrencyConvertServlet() {
         super();
+        String isGrieg = System.getenv("grieg");
+        if (isGrieg != null) {
+        	System.out.println("'grieg' environment variable set. Using production settings");
+        	System.setProperty("http.proxyHost", "tlan184.srvr.cse.edu.au");
+    		System.setProperty("http.proxyPort", "80");
+			url = "http://tlan184.srvr:8080/axis2/services/CurrencyConvertService?wsdl";
+
+        } else {
+        	System.out.println("'grieg' environment variable NOT set. Using development settings");
+        	url = "http://localhost:8080/axis2/services/CurrencyConvertService?wsdl";
+		}
         // TODO Auto-generated constructor stub
     }
 
@@ -52,7 +66,7 @@ public class CurrencyConvertServlet extends HttpServlet {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			String url = "http://localhost:8080/axis2/services/CurrencyConvertService?wsdl";
+			
 			SOAPMessage soapResponse = soapConnection.call(createSOAPRequest(), url);
 
 			// Process the SOAP Response
@@ -80,7 +94,7 @@ public class CurrencyConvertServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		request.setAttribute("message", message);
-		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/index.jsp");
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/currencyconvertservice.jsp");
 		dispatcher.forward(request, response);
 	}
 
@@ -128,3 +142,4 @@ public class CurrencyConvertServlet extends HttpServlet {
 	}
 
 }
+

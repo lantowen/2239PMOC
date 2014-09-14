@@ -14,7 +14,7 @@ This service allows users to filter a Market Data file. Users can filter to see 
 
 <h2>SOAP WSDL</h2>
 <a href="http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl">
-http://mcho421.srvr:8080/axis2/services/ImportDownloadService?wsdl
+http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl
 </a>
 
 <h2>Demo</h2>

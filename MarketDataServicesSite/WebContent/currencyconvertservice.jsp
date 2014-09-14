@@ -15,11 +15,11 @@ This uses a fixed currency conversion rate as of 20th August 2014 from <a href="
 
 <h2>SOAP WSDL</h2>
 <a href="http://tlan184.srvr:8080/axis2/services/CurrencyConvertService?wsdl">
-http://mcho421.srvr:8080/axis2/services/CurrencyConvertService?wsdl
+http://tlan184.srvr:8080/axis2/services/CurrencyConvertService?wsdl
 </a>
 
-<h2>Demo1</h2>
-<form action="TestServlet">
+<h2>Demo</h2>
+<form action="CurrencyConvertServlet">
 <table>
 <tr>
 <td>EventSetId :</td><td> <input type = "text" name="EventSetId"></td>
