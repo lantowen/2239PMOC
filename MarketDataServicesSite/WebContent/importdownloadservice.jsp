@@ -72,10 +72,13 @@ http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl
 <h3>Operation: importMarketData</h3>
 <table width="85%" border=1>
 	<tr><td>Fault Type</td><td>Fault Message</td><td>Cause</td><td>Resolution</td></tr>
-	<tr><td>InvalidEventSetId</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>InvalidURL</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>InvalidSECCode</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>ProgramError</td><td>???</td><td>???</td><td>123</td></tr>
+	<tr><td>InvalidEventSetId</td><td>EventSetId does not exist</td><td>Market Data file corresponding to EventSetId does not exist.</td><td>Please check whether you have the correct EventSetId.</td></tr>
+	<tr><td>InvalidURL</td><td>Invalid URL</td><td>The format or the content of the URL is not correct</td><td>Please input the correct URL</td></tr>
+	<tr><td>InvalidSECCode</td><td>Invalid security code</td><td>The security code format is not correct</td><td>Please input the correct security code</td></tr>
+	<tr><td>Invalid Date input</td><td>Invalid date value: wrong type: </td><td>Input date format is not correct</td><td>Please input the correct date format</td></tr>
+	<tr><td>ProgramError</td><td>Error reading or writing file</td><td>There was an error reading or writing files on the server.</td><td>Please contact the administrator to fix the problem.</td></tr>
+	<tr><td>ProgramError</td><td>Start date must be before the end date</td><td>There is a conflict between input dates</td><td>Please input the correct dates</td></tr>
+	
 </table>
 
 </body>

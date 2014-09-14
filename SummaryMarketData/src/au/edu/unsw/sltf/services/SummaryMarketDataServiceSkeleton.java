@@ -91,10 +91,10 @@ public class SummaryMarketDataServiceSkeleton implements SummaryMarketDataServic
 			reader.close();
 		} catch (FileNotFoundException e1) {
 			throw createFault(SummaryMarketDataFaultType.INVALID_EVENT_SET_ID, 
-					SummaryMarketDataFaultType.INVALID_EVENT_SET_ID.toString());
+					"EventSetId does not exist: " + eventSetId);
 		} catch (IOException e) {
-			throw createFault(SummaryMarketDataFaultType.INVALID_EVENT_SET_ID, 
-					SummaryMarketDataFaultType.INVALID_EVENT_SET_ID.toString());
+			throw createFault(SummaryMarketDataFaultType.PROGRAM_ERROR, 
+					 "Could not write file: " + e.getMessage());
 		}
 		File file = new File(private_dir+eventSetId+".csv");
 		if(file.exists())
