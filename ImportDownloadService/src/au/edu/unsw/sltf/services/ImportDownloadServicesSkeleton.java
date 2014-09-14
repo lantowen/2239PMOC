@@ -182,7 +182,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 			reader.close();
 		} catch (Exception e1) {
 			throw createFault(ImportDownloadFaultType.INVALID_EVENT_SET_ID, 
-					ImportDownloadFaultType.INVALID_EVENT_SET_ID.toString());
+					"EventSetId does not exist: " + eventSetId);
 		}
 		File source = new File(private_dir+eventSetId+".csv");
 		File dest = new File(public_dir+eventSetId+".csv");

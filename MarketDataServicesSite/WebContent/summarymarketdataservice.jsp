@@ -62,8 +62,8 @@ http://tlan184.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
 <h3>Operation: currencyConvertMarketData</h3>
 <table width="85%" border=1>
 	<tr><td>Fault Type</td><td>Fault Message</td><td>Cause</td><td>Resolution</td></tr>
-	<tr><td>InvalidEventSetId</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>ProgramError</td><td>???</td><td>???</td><td>123</td></tr>
+	<tr><td>InvalidEventSetId</td><td>EventSetId does not exist</td><td>Market Data file corresponding to EventSetId does not exist.</td><td>Please check whether you have the correct EventSetId.</td></tr>
+	<tr><td>ProgramError</td><td>Error reading or writing file</td><td>There was an error reading or writing files on the server.</td><td>Please contact the administrator to fix the problem.</td></tr>
 </table>
 
 </body>
