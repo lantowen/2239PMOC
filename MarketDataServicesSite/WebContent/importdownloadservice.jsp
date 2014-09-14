@@ -13,14 +13,14 @@
 This service allows users to filter a Market Data file. Users can filter to see the trades of a particular security during a certain time frame.
 
 <h2>SOAP WSDL</h2>
-<a href="http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl">
-http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl
+<a href="http://tlan184.srvr:8080/axis2/services/ImportDownloadServices?wsdl">
+http://tlan184.srvr:8080/axis2/services/ImportDownloadServices?wsdl
 </a>
 
 <h2>Demo</h2>
 <form action="ImportDownloadServlet">
 <table>
-<tr><td>ImportService</td></tr>
+<tr><td><h3>ImportService</h3></td></tr>
 <tr>
 <td>sec:</td><td> <input type = "text" name="sec"></td>
 </tr>
@@ -40,7 +40,7 @@ http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl
 </form>
 <form action="ImportDownloadServlet">
 <table>
-<tr><td>DownloadService</td></tr>
+<tr><td><h3>DownloadService</h3></td></tr>
 <tr>
 <td>eventSetId:</td><td> <input type = "text" name="eventSetId"></td>
 </tr>
