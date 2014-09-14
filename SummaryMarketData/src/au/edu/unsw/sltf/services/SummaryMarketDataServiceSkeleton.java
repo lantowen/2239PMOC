@@ -49,26 +49,26 @@ public class SummaryMarketDataServiceSkeleton implements SummaryMarketDataServic
 		try {
 			BufferedReader reader = new BufferedReader(new FileReader(private_dir+eventSetId+".csv"));
 			String inputLine = reader.readLine();
+			inputLine = reader.readLine();
 			System.out.println(inputLine);
 			String[] result = inputLine.split(",", -1);
 			sec = result[0];
 			String[] dateData = result[1].split("-");
 			String[] timeData = result[2].split(":");
 			String second = timeData[2].substring(0,timeData[2].lastIndexOf("."));
-			int month = 0;
+			int month = 13;
 			System.out.println(inputLine);
 			month = getMonthNum(dateData[1]);
 			startDate.set(Integer.parseInt(dateData[2]), month, Integer.parseInt(dateData[0]), 
 						Integer.parseInt(timeData[0]),Integer.parseInt(timeData[1]),Integer.parseInt(second));
 			marketType = result[4];
-			System.out.println(startDate);
-			
-			if(result[5] != null){
+			//System.out.println(startDate);
+			currencyCode = "AUD";
+			if(result[5] != null && result[5].length() >= 3){
 				if(result[5].substring(0,2).matches("[A-Z]{3}"))
 					currencyCode = result[5].substring(0,2);
-				else
-					currencyCode = "AUD";
 			}
+				
 			System.out.println(currencyCode);
 			 while ((inputLine = reader.readLine()) != null){
 				 result = inputLine.split(",", -1);
@@ -129,31 +129,31 @@ public class SummaryMarketDataServiceSkeleton implements SummaryMarketDataServic
 	}
 	private int getMonthNum(String month) {
 		 if(month.equals("JAN"))
-			 return 1;
-		 else if(month.equals("FEB"))
-			 return 2;
-		 else if(month.equals("MAR"))
-			 return 3;
-		 else if(month.equals("APR"))
-			 return 4;
-		 else if(month.equals("MAY"))
-			 return 5;
-		 else if(month.equals("JUN"))
-			 return 6;
-		 else if(month.equals("JUL"))
-			 return 7;
-		 else if(month.equals("AUG"))
-			 return 8;
-		 else if(month.equals("SEP"))
-			 return 9;
-		 else if(month.equals("OCT"))
-			 return 10;
-		 else if(month.equals("NOV"))
-			 return 11;
-		 else if(month.equals("DEC"))
-			 return 12;
-		 else
 			 return 0;
+		 else if(month.equals("FEB"))
+			 return 1;
+		 else if(month.equals("MAR"))
+			 return 2;
+		 else if(month.equals("APR"))
+			 return 3;
+		 else if(month.equals("MAY"))
+			 return 4;
+		 else if(month.equals("JUN"))
+			 return 5;
+		 else if(month.equals("JUL"))
+			 return 6;
+		 else if(month.equals("AUG"))
+			 return 7;
+		 else if(month.equals("SEP"))
+			 return 8;
+		 else if(month.equals("OCT"))
+			 return 9;
+		 else if(month.equals("NOV"))
+			 return 10;
+		 else if(month.equals("DEC"))
+			 return 11;
+		 else
+			 return 13;
 		
 	}
 	private String humanReadableByteCount(long bytes) {

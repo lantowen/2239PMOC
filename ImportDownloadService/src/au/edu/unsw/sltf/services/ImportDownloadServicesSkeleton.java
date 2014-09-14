@@ -111,6 +111,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 					}
 					PrintWriter writer = new PrintWriter(private_dir+newFileName, "UTF-8");
 					inputLine = in.readLine();
+					writer.println(inputLine);
 			        while ((inputLine = in.readLine()) != null){
 						 String[] result = inputLine.split(",");
 						 if(!secStr.equals(result[0]))
@@ -210,6 +211,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		if(inetAddress != null) 
 			retAddress = inetAddress.getHostAddress()+":8080/"+eventSetId+".csv";
 		
+		retAddress = "http://tlan184.srvr:8080/"+eventSetId+".csv";
 		System.out.println(retAddress);
 		DownloadFileResponseDocument resDoc = DownloadFileResponseDocument.Factory.newInstance();
 		DownloadFileResponse res = resDoc.addNewDownloadFileResponse();
@@ -232,31 +234,31 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 	}
 	private int getMonthNum(String month) {
 		 if(month.equals("JAN"))
-			 return 1;
-		 else if(month.equals("FEB"))
-			 return 2;
-		 else if(month.equals("MAR"))
-			 return 3;
-		 else if(month.equals("APR"))
-			 return 4;
-		 else if(month.equals("MAY"))
-			 return 5;
-		 else if(month.equals("JUN"))
-			 return 6;
-		 else if(month.equals("JUL"))
-			 return 7;
-		 else if(month.equals("AUG"))
-			 return 8;
-		 else if(month.equals("SEP"))
-			 return 9;
-		 else if(month.equals("OCT"))
-			 return 10;
-		 else if(month.equals("NOV"))
-			 return 11;
-		 else if(month.equals("DEC"))
-			 return 12;
-		 else
 			 return 0;
+		 else if(month.equals("FEB"))
+			 return 1;
+		 else if(month.equals("MAR"))
+			 return 2;
+		 else if(month.equals("APR"))
+			 return 3;
+		 else if(month.equals("MAY"))
+			 return 4;
+		 else if(month.equals("JUN"))
+			 return 5;
+		 else if(month.equals("JUL"))
+			 return 6;
+		 else if(month.equals("AUG"))
+			 return 7;
+		 else if(month.equals("SEP"))
+			 return 8;
+		 else if(month.equals("OCT"))
+			 return 9;
+		 else if(month.equals("NOV"))
+			 return 10;
+		 else if(month.equals("DEC"))
+			 return 11;
+		 else
+			 return 13;
 		
 	}
 
