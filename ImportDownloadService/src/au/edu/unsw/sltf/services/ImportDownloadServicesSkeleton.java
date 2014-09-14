@@ -211,6 +211,7 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 		if(inetAddress != null) 
 			retAddress = inetAddress.getHostAddress()+":8080/"+eventSetId+".csv";
 		
+		retAddress = "http://tlan184.srvr:8080/"+eventSetId+".csv";
 		System.out.println(retAddress);
 		DownloadFileResponseDocument resDoc = DownloadFileResponseDocument.Factory.newInstance();
 		DownloadFileResponse res = resDoc.addNewDownloadFileResponse();
