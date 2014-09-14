@@ -86,7 +86,7 @@ public class SummaryServlet extends HttpServlet {
 	        	marketType = "marketType: " + innerResultList.item(4).getTextContent().trim();
 	        	currencyCode = "currencyCode: " + innerResultList.item(5).getTextContent().trim();
 	        	fileSize = "fileSize: " + innerResultList.item(6).getTextContent().trim();
-
+	        	message = "";
 	        	//System.out.println(msg);
 	        }
 	        else {
@@ -96,16 +96,14 @@ public class SummaryServlet extends HttpServlet {
 	        	NodeList deepResultList = innerResultList.item(0).getChildNodes();
 	        	String msg = deepResultList.item(1).getTextContent().trim();
 	        	message = "Fault :"+ msg;
+	        	newEventSetId = sec = startDate = endDate = marketType
+						= currencyCode = fileSize = "";
 	        	System.out.println(msg);
 	        }
 			soapConnection.close();
 		} catch (Exception e) {
 			System.err.println("Error occurred while sending SOAP Request to Server");
 			e.printStackTrace();
-		}
-		if(message != null) {
-			newEventSetId = sec = startDate = endDate = marketType
-					= currencyCode = fileSize = "";
 		}
 		request.setAttribute("newEventSetId", newEventSetId);
 		request.setAttribute("sec", sec);

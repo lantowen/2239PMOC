@@ -137,6 +137,8 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
 		}
 
         String inLine;
+        inLine = reader.readLine();
+        writer.println(inLine);
         while ((inLine = reader.readLine()) != null) {
             String[] result = inLine.split(",", -1);
             if (result.length != 11) {
