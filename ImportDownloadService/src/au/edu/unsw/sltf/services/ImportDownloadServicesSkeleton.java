@@ -41,6 +41,17 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 	// TODO: initialise to the value from the last run/crash of tomcat
 	private static int counter  = 0;
 
+	static {
+		try {
+			BufferedReader reader = new BufferedReader(new FileReader(private_dir+"counter"));
+			counter = Integer.parseInt(reader.readLine().trim());
+			++counter;
+			reader.close();
+		} catch (Exception e1) {
+			System.out.println("Could not read counter, this should be the first run");
+		}
+	}
+
 	/**
 	 * Auto generated method signature
 	 * 
@@ -123,6 +134,9 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 				} 
 			        in.close();
 			        writer.close();
+			        PrintWriter counterFile = new PrintWriter(private_dir+"counter", "UTF-8");
+					counterFile.println(counter);
+					counterFile.close();
 				} catch (IOException e) {
 					urlFlag = true;
 				}

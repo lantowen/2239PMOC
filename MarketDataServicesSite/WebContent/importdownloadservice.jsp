@@ -57,8 +57,7 @@ http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl
 	<tr><td>sec</td><td>String</td><td>The security code of the financial instrument to filter for.</td><td>ABCD</td></tr>
 	<tr><td>startDate</td><td>dateTime</td><td>Filter market activity occuring after this timestamp (inclusive).</td><td>1992-12-23T11:22:33</td></tr>
 	<tr><td>endDate</td><td>dateTime</td><td>Filter market activity before this timestamp (inclusive).</td><td>2014-02-23T23:22:33</td></tr>
-	<tr><td>dataSourceURL</td><td>URL</td><td>URL that points to an input Market Data file.</td><td>http://www.cse.unsw.edu.au/~hpaik/9322/assignments/
-	common/files_csv_spec/FinDataSimple.csv</td></tr>
+	<tr><td>dataSourceURL</td><td>URL</td><td>URL that points to an input Market Data file.</td><td>http://www.cse.unsw.edu.au/~hpaik/9322/assignments/common/files_csv_spec/FinDataSimple.csv</td></tr>
 </table>
 <br/>The result of this operation is an eventSetId string which can be used to refer to the filtered data file.
 
