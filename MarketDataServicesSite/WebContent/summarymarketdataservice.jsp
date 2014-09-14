@@ -22,9 +22,9 @@ http://mcho421.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
 <form action="SummaryServlet">
 <table>
 <tr>
-<td>EventSetId :</td><td> <input type = "text" name="EventSetId"></td>
+<td>EventSetId :</td><td> <input type = "text" name="eventSetId" > </td>
 </tr>
-<tr><td><font color =red>${eventSetId}</font></td></tr>
+<tr><td><font color =red>${newEventSetId}</font></td></tr>
 <tr>
 </tr>
 <tr><td><font color =red>${sec}</font></td></tr>
