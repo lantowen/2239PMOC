@@ -137,13 +137,14 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
 		}
 
         String inLine;
+        int lineNum = 1;
         while ((inLine = reader.readLine()) != null) {
             String[] result = inLine.split(",", -1);
             if (result.length != 11) {
             	reader.close();
             	writer.close();
                 throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
-                        "Corrupted file - Line does not have 11 fields: " + inLine);
+                        "Corrupted file - Line does not have 11 fields: Line " + lineNum);
             }
             String priceStr = result[5]; // Note: empty string is valid
 
@@ -160,9 +161,10 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
                     reader.close();
                     writer.close();
                     throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
-                            "Corrupted file - Invalid price: " + inLine);
+                            "Corrupted file - Invalid price: Line " + lineNum);
             	}
             }
+            ++lineNum;
         }
 
         reader.close();

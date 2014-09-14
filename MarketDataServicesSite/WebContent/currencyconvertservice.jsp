@@ -46,10 +46,13 @@ http://tlan184.srvr:8080/axis2/services/CurrencyConvertService?wsdl
 <h3>Operation: currencyConvertMarketData</h3>
 <table width="85%" border=1>
 	<tr><td>Fault Type</td><td>Fault Message</td><td>Cause</td><td>Resolution</td></tr>
-	<tr><td>InvalidEventSetId</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>InvalidCurrency</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>InvalidMarketData</td><td>???</td><td>???</td><td>123</td></tr>
-	<tr><td>ProgramError</td><td>???</td><td>???</td><td>123</td></tr>
+	<tr><td>InvalidEventSetId</td><td>Invalid format for EventSetId</td><td>The format of the EventSetId is incorrect.</td><td>The format for EventSetId is an integer</td></tr>
+	<tr><td>InvalidEventSetId</td><td>Cannot convert EventSetIds of this format</td><td>You can only convert the original file.</td><td>Please drop the currency extension of the EventSetId</td></tr>
+	<tr><td>InvalidEventSetId</td><td>EventSetId does not exist</td><td></td><td></td></tr>
+	<tr><td>InvalidCurrency</td><td>Invalid currency</td><td>Target currency code is invalid.</td>See <a href="http://www.xe.com/currencytables/?from=AUD&date=2014-08-20">XE.com</a> for a list of valid currency codes.<td></td></tr>
+	<tr><td>InvalidCurrency</td><td>Cannot convert to AUD</td><td>Only conversions from AUD to other currencies are allowed.</td>To get the prices in AUD, use the eventSetId without the currency extension.<td></td></tr>
+	<tr><td>InvalidMarketData</td><td>Corrupted file</td><td>The format of the file on the server is incorrect.</td><td>Re-import the original Market Data file.</td></tr>
+	<tr><td>ProgramError</td><td>Error reading or writing file</td><td>There was an error reading or writing files on the server.</td><td>Please contact the administrator to fix the problem.</td></tr>
 </table>
 
 </body>
