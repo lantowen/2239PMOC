@@ -126,7 +126,7 @@ public class ImportDownloadServlet extends HttpServlet {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			String url = "http://localhost:8080/axis2/services/ImportDownloadServices?wsdl";
+//			String url = "http://localhost:8080/axis2/services/ImportDownloadServices?wsdl";
 			SOAPMessage soapResponse = soapConnection.call(createDownloadSOAPRequest(), url);
 
 			// Process the SOAP Response
