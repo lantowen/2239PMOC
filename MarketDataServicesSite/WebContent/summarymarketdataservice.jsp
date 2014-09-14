@@ -19,7 +19,37 @@ http://mcho421.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
 </a>
 
 <h2>Demo</h2>
-TODO: put client here
+<form action="SummaryServlet">
+<table>
+<tr>
+<td>EventSetId :</td><td> <input type = "text" name="EventSetId"></td>
+</tr>
+<tr><td><font color =red>${eventSetId}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${sec}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${startDate}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${endDate}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${marketType}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${currencyCode}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${fileSize}</font></td></tr>
+<tr>
+</tr>
+<tr><td><font color =red>${message}</font></td></tr>
+<tr>
+<td><input type="submit" value ="submit"></td>		
+</table>			
+</form>
 
 <h2>Parameters</h2>
 <h3>Operation: summaryMarketData</h3>
