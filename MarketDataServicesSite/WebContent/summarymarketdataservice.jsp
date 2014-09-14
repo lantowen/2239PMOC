@@ -14,7 +14,7 @@ This service summarises the contents of an imported Market Data file.
 It shows the security code, period of market data events, the types of events, the currency and the file size.
 
 <h2>SOAP WSDL</h2>
-<a href="http://mcho421.srvr:8080/axis2/services/SummaryMarketDataService?wsdl">
+<a href="http://tlan184.srvr:8080/axis2/services/SummaryMarketDataService?wsdl">
 http://mcho421.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
 </a>
 

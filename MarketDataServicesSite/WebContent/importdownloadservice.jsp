@@ -13,7 +13,7 @@
 This service allows users to filter a Market Data file. Users can filter to see the trades of a particular security during a certain time frame.
 
 <h2>SOAP WSDL</h2>
-<a href="http://mcho421.srvr:8080/axis2/services/ImportDownloadService?wsdl">
+<a href="http://tlan184.srvr:8080/axis2/services/ImportDownloadService?wsdl">
 http://mcho421.srvr:8080/axis2/services/ImportDownloadService?wsdl
 </a>
 

@@ -14,7 +14,7 @@ This service converts an imported Market Data file from AUD to another currency.
 This uses a fixed currency conversion rate as of 20th August 2014 from <a href="http://www.xe.com/currencytables/?from=AUD&date=2014-08-20">XE.com</a>.
 
 <h2>SOAP WSDL</h2>
-<a href="http://mcho421.srvr:8080/axis2/services/CurrencyConvertService?wsdl">
+<a href="http://tlan184.srvr:8080/axis2/services/CurrencyConvertService?wsdl">
 http://mcho421.srvr:8080/axis2/services/CurrencyConvertService?wsdl
 </a>
 
