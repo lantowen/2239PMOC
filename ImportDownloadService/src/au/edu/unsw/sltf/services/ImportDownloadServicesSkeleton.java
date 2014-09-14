@@ -122,6 +122,9 @@ public class ImportDownloadServicesSkeleton implements ImportDownloadServicesSke
 				} 
 			        in.close();
 			        writer.close();
+			        PrintWriter counterFile = new PrintWriter(private_dir+"counter", "UTF-8");
+					counterFile.println(counter);
+					counterFile.close();
 				} catch (IOException e) {
 					urlFlag = true;
 				}
