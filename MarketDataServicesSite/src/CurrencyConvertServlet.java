@@ -26,7 +26,7 @@ import org.w3c.dom.NodeList;
 /**
  * Servlet implementation class TestServlet
  */
-@WebServlet(name="TestServlet", urlPatterns={"/TestServlet"})
+@WebServlet(name="CurrencyConvertServlet", urlPatterns={"/CurrencyConvertServlet"})
 public class CurrencyConvertServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	static String evenSetId;

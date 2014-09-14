@@ -15,7 +15,7 @@ It shows the security code, period of market data events, the types of events, t
 
 <h2>SOAP WSDL</h2>
 <a href="http://tlan184.srvr:8080/axis2/services/SummaryMarketDataService?wsdl">
-http://mcho421.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
+http://tlan184.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
 </a>
 
 <h2>Demo</h2>
