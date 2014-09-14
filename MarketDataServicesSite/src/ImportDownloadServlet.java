@@ -34,11 +34,23 @@ public class ImportDownloadServlet extends HttpServlet {
 	static String dataSourceURL ;
 	static String eventSetId;
 	static String message1, message2;
+	static String url;
     /**
      * @see HttpServlet#HttpServlet()
      */
     public ImportDownloadServlet() {
         super();
+        String isGrieg = System.getenv("grieg");
+        if (isGrieg != null) {
+        	System.out.println("'grieg' environment variable set. Using production settings");
+        	System.setProperty("http.proxyHost", "tlan184.srvr.cse.edu.au");
+    		System.setProperty("http.proxyPort", "80");
+			url = "http://tlan184.srvr:8080/axis2/services/ImportDownloadServices?wsdl";
+
+        } else {
+        	System.out.println("'grieg' environment variable NOT set. Using development settings");
+        	url = "http://localhost:8080/axis2/services/ImportDownloadServices?wsdl";
+		}
         // TODO Auto-generated constructor stub
     }
 
@@ -73,7 +85,7 @@ public class ImportDownloadServlet extends HttpServlet {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
 			// Send SOAP Message to SOAP Server
-			String url = "http://localhost:8080/axis2/services/ImportDownloadServices?wsdl";
+			//String url = "http://localhost:8080/axis2/services/ImportDownloadServices?wsdl";
 			SOAPMessage soapResponse = soapConnection.call(createImportSOAPRequest(), url);
 
 			// Process the SOAP Response

@@ -22,7 +22,7 @@ http://tlan184.srvr:8080/axis2/services/SummaryMarketDataService?wsdl
 <form action="SummaryServlet">
 <table>
 <tr>
-<td>EventSetId :</td><td> <input type = "text" name="eventSetId" > </td>
+<td>EventSetId :</td><td> <input type = "text" name="EventSetId" > </td>
 </tr>
 <tr><td><font color =red>${newEventSetId}</font></td></tr>
 <tr>
