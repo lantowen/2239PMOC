@@ -19,6 +19,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -140,7 +143,9 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
         int lineNum = 1;
         inLine = reader.readLine();
         writer.println(inLine);
+        boolean isEmpty = true;
         while ((inLine = reader.readLine()) != null) {
+        	isEmpty = false;
             String[] result = inLine.split(",", -1);
             if (result.length != 11) {
             	reader.close();
@@ -148,29 +153,52 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
                 throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
                         "Corrupted file - Line does not have 11 fields: Line " + lineNum);
             }
-            String priceStr = result[5]; // Note: empty string is valid
+            int[] idxs = new int[3];
+            idxs[0] = 5;
+            idxs[1] = 7;
+            idxs[2] = 9;
+            
+            for (int i = 0; i < idxs.length; ++i) {
+                int idx = idxs[i];
+                String priceStr = result[idx]; // Note: empty string is valid
 
-            // No conversion on empty string, append currency code on valid numbers
-            if (priceStr.equals("")) {
-                writer.println(inLine);
-            } else {
-            	try {
-                    double price = Double.parseDouble(priceStr);
-                    double resPrice = converter.convertAUD(price, currency);
-            		result[5] = currency + String.valueOf(resPrice);
-            		writer.println(joinString(result, ","));
-            	} catch (NumberFormatException e) {
-                    reader.close();
-                    writer.close();
-                    throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
-                            "Corrupted file - Invalid price: Line " + lineNum);
-            	}
+                // No conversion on empty string, append currency code on valid numbers
+                if (priceStr.equals("")) {
+                    continue;
+                } else {
+                    try {
+                        double price = Double.parseDouble(priceStr);
+                        double resPrice = converter.convertAUD(price, currency);
+                        DecimalFormat df = new DecimalFormat("#.##");
+                        int integerPlaces = priceStr.indexOf('.');
+                        int decimalPlaces;
+                        if (integerPlaces == -1)
+                        	decimalPlaces = 0;
+                        else
+                            decimalPlaces = priceStr.length() - integerPlaces - 1;
+//                        result[idx] = currency + df.format(resPrice);
+                        result[idx] = currency + round(resPrice, decimalPlaces);
+                    } catch (NumberFormatException e) {
+                        reader.close();
+                        writer.close();
+                        throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
+                                "Corrupted file - Invalid price: Line " + lineNum);
+                    }
+                }
+                    
             }
+            writer.println(joinString(result, ","));
             ++lineNum;
+
         }
 
         reader.close();
         writer.close();
+        
+        if (isEmpty)
+            throw createFault(CurrencyConvertFaultType.INVALID_MARKET_DATA, 
+                    "Empty file");
+        
         return resEventSetId;
 	}
 	
@@ -192,6 +220,15 @@ public class CurrencyConvertServiceSkeleton implements CurrencyConvertServiceSke
             sb.append(strings[i]);
         }
         return sb.toString();
+	}
+
+	public static String round(double value, int places) {
+		// from http://stackoverflow.com/questions/2808535/round-a-double-to-2-decimal-places
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.toString();
 	}
 
 }
